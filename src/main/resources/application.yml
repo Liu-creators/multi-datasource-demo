@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  # Oracle数据源配置
+  oracle:
+    datasource:
+      jdbc-url: jdbc:oracle:thin:@//10.102.52.208:1521/eomsdb_test?oracle.net.CONNECT_TIMEOUT=10000&oracle.jdbc.ReadTimeout=30000
+      username: eoms_test
+      password: LcEoms#!123
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+  # PostgreSQL数据源配置
+  postgres:
+    datasource:
+      jdbc-url: jdbc:postgresql://localhost:5432/idoc
+      username: postgres
+      password: postgres
+      driver-class-name: org.postgresql.Driver
+  mysql:
+    datasource:
+      jdbc-url: jdbc:mysql://localhost:3306/collect?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+logging:
+  level:
+    com.zaxxer.hikari: DEBUG
+    oracle.jdbc: DEBUG
