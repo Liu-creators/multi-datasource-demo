@@ -1,25 +1,28 @@
-package com.example.multidatasourcedemo.config;
+package com.example.oraclepostgressync.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
 @Configuration
-public class MySQLConfig {
+public class OracleConfig {
 
-    @Bean(name = "mysqlDataSource")
-    @ConfigurationProperties(prefix = "spring.mysql.datasource")
-    public DataSource mysqlDataSource() {
+    @Primary
+    @Bean(name = "oracleDataSource")
+    @ConfigurationProperties(prefix = "spring.oracle.datasource")
+    public DataSource oracleDataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "mysqlJdbcTemplate")
-    public JdbcTemplate mysqlJdbcTemplate(@Qualifier("mysqlDataSource") DataSource dataSource) {
+    @Primary
+    @Bean(name = "oracleJdbcTemplate")
+    public JdbcTemplate oracleJdbcTemplate(@Qualifier("oracleDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 }
