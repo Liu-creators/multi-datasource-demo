@@ -1,28 +1,61 @@
 server:
-  port: 8080
+  port: 8088
 
 spring:
   # Oracle数据源配置
   oracle:
     datasource:
-      jdbc-url: jdbc:oracle:thin:@//10.102.52.208:1521/eomsdb_test?oracle.net.CONNECT_TIMEOUT=10000&oracle.jdbc.ReadTimeout=30000
-      username: eoms_test
-      password: LcEoms#!123
-      driver-class-name: oracle.jdbc.driver.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@//localhost:1521/dbname?oracle.net.CONNECT_TIMEOUT=10000&oracle.jdbc.ReadTimeout=30000
+      username: username
+      password: password
+      driver-class-name: oracle.jdbc.OracleDriver
+      maximum-pool-size: 20              # 增加连接池大小
+      minimum-idle: 5                    # 最小空闲连接数
+      idle-timeout: 300000              # 空闲连接超时时间
+      connection-timeout: 20000         # 连接超时时间
   # PostgreSQL数据源配置
   postgres:
     datasource:
-      jdbc-url: jdbc:postgresql://localhost:5432/idoc
-      username: postgres
-      password: postgres
+      jdbc-url: jdbc:postgresql://localhost:5432/dbname
+      username: username
+      password: password
       driver-class-name: org.postgresql.Driver
-  mysql:
-    datasource:
-      jdbc-url: jdbc:mysql://localhost:3306/collect?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      username: root
-      password: 123456
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
 logging:
   level:
-    com.zaxxer.hikari: DEBUG
-    oracle.jdbc: DEBUG
+    root: INFO                           # 全局日志级别
+    com.example.oraclepostgressync: INFO    # 应用程序包的日志级别
+    com.zaxxer.hikari: WARN             # HikariCP连接池日志级别
+    oracle.jdbc: WARN                    # Oracle JDBC日志级别
+    org.springframework.jdbc: INFO       # Spring JDBC日志级别
+
+sync:
+  postgres-schema: target_schema
+  oracle-schema: source_schema
+  batch-size: 1000                    # 添加批处理大小配置
+  parallel-sync: true              # 是否启用并行同步
+  tables:
+    - tableName: table_name1
+      syncCron: "0 0/1 * * * ?"     # 每分钟的0秒执行
+      primaryKey: primary_key
+      columns:
+      whereCondition: "1=1"
+      fetchSize: 2000                # 添加每次查询的记录数限制
+      order: 1                      # 执行顺序
+
+    - tableName: table_name2
+      syncCron: "30 0/2 * * * ?"    # 从30秒开始执行，每2分钟一次
+      primaryKey: primary_key
+      columns:
+      whereCondition: "1=1"
+      order: 2
+
+    - tableName: table_name3
+      syncCron: "15 0/3 * * * ?"    # 从15秒开始执行，每3分钟一次
+      primaryKey: primary_key
+      columns:
+      whereCondition: "1=1"
+      order: 3

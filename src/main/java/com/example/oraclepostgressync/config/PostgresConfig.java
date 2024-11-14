@@ -1,4 +1,4 @@
-package com.example.multidatasourcedemo.config;
+package com.example.oraclepostgressync.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
